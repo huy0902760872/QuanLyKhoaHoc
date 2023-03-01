@@ -69,5 +69,47 @@ public class CourseDAO extends DBConnection {
             throw new RuntimeException(e);
         }
         return flag;
+    } public ArrayList<Course> getCourse(int id) throws SQLException {
+        ArrayList<Course> CourseList = new ArrayList<>();
+        
+        String sql = "SELECT * FROM Person WHERE id = ? ";
+                 
+        
+        stmt = conn.prepareStatement(sql);
+        stmt.setInt(1,id);
+          
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Course course;
+            course = new Course(
+                    rs.getInt("CourseID"),
+                    rs.getString("Title"),
+                    rs.getInt("Credits"),
+                    rs.getInt("DepartmentId")
+                    
+            );
+            CourseList.add(course);
+        }
+        return CourseList;
+        
+       
+    }
+    
+    public void addCourse(Course dto) {
+        
+        
+        try {
+            stmt = conn.prepareStatement("INSERT INTO Course(CourseID,Title,Credits,DeparmentId)");
+          stmt.setInt(1,((Course) dto).getCourseID());
+          stmt.setString(2,((Course) dto).getTitle());
+            stmt.setInt(3,((Course) dto).getCredits());
+            stmt.setInt(4,((Course) dto).getDepartmentId());
+          
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        
+      
+      
     }
 }
